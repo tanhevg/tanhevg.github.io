@@ -74,8 +74,15 @@ copyright:             © 2026. All rights reserved.
 permalink:             /:categories/:year-:month-:day-:title/
 
 # Pagination configuration (used by the `blog` layout)
-paginate:              10
-paginate_path:         /posts/:num/
+# paginate:              10
+# paginate_path:         /page:num/
+pagination:
+  enabled: true
+  per_page: 5
+  permalink: "/page/:num/"
+  title_suffix: " - Page :num"
+  sort_field: "date"
+  sort_reverse: true
 
 
 # Theme
@@ -329,7 +336,7 @@ plugins:
   - jekyll-default-layout
   - jekyll-feed
   - jekyll-optional-front-matter
-  - jekyll-paginate
+  - jekyll-paginate-v2
   - jekyll-readme-index
   - jekyll-redirect-from
   - jekyll-relative-links
