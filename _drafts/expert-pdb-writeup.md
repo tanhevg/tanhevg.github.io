@@ -3,11 +3,16 @@ layout: post
 title: My first post
 ---
 
-# Acquiring protein production data with agentic AI: what I've learned.
+# Protein production data acquisition with agentic AI: what I've learned.
 
-    For now, italics means that I am not happy with the wording and style. ***TODO*** edit further, and address/rephrase all italics, possibly borrowing phrases from other publications of mine or using LLMs.
+    For now, italics means that I am not happy with the wording and style. ***TODO*** edit further, and address/rephrase all italics, possibly borrowing phrases from other publications of mine or using LLMs. 
 
     Carrots(^) means that a citations would be nice here. ***TODO*** insert citations as hyperlinks
+
+    ***TODO*** once all the italics that indicate rephrasing are edited out, maybe use italics to indicate the first occurrence of the term from the glossary
+
+* this is a fake list for TOC
+{:toc}
 
 ## TL;DR
 * It works
@@ -18,41 +23,44 @@ title: My first post
 * **TODO** talk about the Expert paper here
 * This is an unfinished project. Mostly this is a long "note to self" in case I have an opportunity to get back to this. But maybe others will find some of this interesting too.
 
-## Rationale.
+## Rationale
 
 Production of protein reagents is a critical early step in drug discovery^, structure determination^ and _many other life sciences applications_^. 
-Modern recombinant protein production process typically works as follows.
-The DNA sequence of the protein of interest (POI) is cloned into a vector - some biological entity that is capable of infecting cells, like a virus or a plasmid. 
+Modern recombinant protein production process typically starts wth cloning the DNA sequence of the protein of interest (POI) into a vector - some biological entity that is capable of infecting cells, like a virus or a plasmid. 
 The vectors are then transfected into the host cells that express the protein. 
-There are a few commonly used host strains in biosciences: bacterial (_Escherichia coli (E. coli)_), yeast, insect or mammalian. Cell free expression systems have also started to gain traction recently. 
+There are a few commonly used host strains in biosciences: bacterial (_Escherichia coli (E. coli)_), yeast, insect or mammalian. 
+Cell free expression systems have also started to gain traction recently. 
 Once the protein is expressed, it needs to be purified, before it can be used for downstream experiments like measuring the potency of a drug candidate or the immune response to the antibody.
 
 Protein production is an error prone process that often goes wrong: proteins either fail to express or cannot be purified. 
 In nature, proteins are produced in living cells under tightly regulated conditions, often in tiny concentrations and bound to other molecules. 
 Replicating these conditions in the lab, or finding other suitable conditions to recombinantly express and purify the POI, may be challenging or impossible. 
-First and foremost, success of protein production depends on protein - intrinsic conditions, such as protein and DNA sequence, physico-chemichal properties of the construct, usage of tags, co-expressing partner proteins and chaperones. 
-Other factors that affect the outcome include the choice of vector and host, cell growth time and temperature, induction and lysation methods, purification protocol details, composition of buffers, etc. 
+First and foremost, success of protein production depends on protein-intrinsic conditions, such as protein and DNA sequence, physico-chemichal properties of the construct, usage of tags, co-expressing partner proteins and chaperones. 
+Other factors that affect the outcome include the choice of vector and host, cell growth time and temperature, induction and lysation methods, purification protocol details, composition of wash and solution buffers, etc. 
  
-Results and protocols of protein production experiments are regularly published in peer reviewed academic journals (typically within the context of downstream results, such as protein structures or drug discovery studies), however I am not aware of any bioinformatics resource or a database that _systematises_ this information, like the PDB^ does for protein structures or Uniprot^ for proteins in general.
-Such a resource would be extremely valuable for academia and industry as a historic reference of protein production protocols (both successful and failed), for experiment reproducibility and as a source of training and evaluation data for AI models. 
-This is a writeup of the first stage of curating such a dataset from academic publications with Large Language Models (LLMs).
+Results and protocols of protein production experiments are regularly published in peer reviewed academic journals, typically within the context of downstream results, such as protein structures or drug discovery studies.
+I am, however, not aware of any bioinformatics resource or a database that _systematises_ this information, like the PDB^ does for protein structures or Uniprot^ for proteins in general.
+Such a resource would be extremely valuable for academia and industry as a historic reference of protein production protocols (both successful and failed), for experiment reproducibility and as a source of training and evaluation data for AI models.
 
-## Deciphering the modern AI jargon
+The data capture template defining the protocol details has been proposed by the Expert paper^.
+They contain the information about the target, the construct, expression and purification protocols.
+_E. coli_, insect and mammalian expression hosts are covered, along with cell-free systems. 
+The templates support capturing the information about the protein complexes.
+Two datasets that demonstrate how these templates can be applied in practice have been deposited to BioStudies ([1^, 2^]).
+This project takes the Expert work further, by using AI to curate protein production protocols from academic publications.
 
-LLMs and AI agents are complex software systems. All the details of LLM training and inner workings of AI agents are too numerous to be covered by a blog post. Some are in fact trade secrets of the multi-billion dollar companies that develop these systems. The next few paragraphs explain the AI terminology that is used throughout the rest of this blog post.
+Here is an example of how a protein production protocol is described in a [publication](https://pmc.ncbi.nlm.nih.gov/articles/PMC13224165/) :
 
-Fundamentally, LLMs are tools that predict the next token (word or part of a word) based on the context: the input tokens plus the previously generated tokens. AI agents are applications that allow users to interact with LLMs and allow the LLMs to use tools. General purpose AI agents like ChatGPT, Codex or Gemini have become ubiquitous in recent years. This project is essentially about developing a custom AI assistant on an open source software stack, which is purpose-built for extracting data from academic publications and can be run in an automated setting.
+> ##### Cloning of Expression Plasmids, Expression of Recombinant Proteins, and Protein Purification
+> Plasmids for expression of the human CHD1 tCD in fusion with a hexahistidine tag (His), enhanced green fluorescent protein (GFP), and/or NanoLuc luciferase (NLuc) [pET15b_hCHD1<sub>260–443</sub>His, pET15b_His-hCHD1<sub>270–443</sub>, pET15b_His-GFP-hCHD1<sub>260–443</sub>, and pNLF1\_NanoLuc-hCHD1<sub>260–443</sub>] were generated by PCR cloning using standard techniques or have been previously described. The plasmid pET15b_CHD1<sub>260–443</sub>(D425A)­His encoding mutant CHD1 was generated by standard PCR cloning. The cDNA of human METTL21A<sub>1–226</sub> was cloned into pET28a in fusion with an N-terminal His-SUMO tag. The cDNA of human HSPA8<sub>1–641</sub> was cloned into pGEX-6P-1. The cDNA of human METTL21B<sub>1–226</sub> was cloned into a pFastBac-HTb. Cloning vectors pET15b and pET18a were obtained from Novagen, pNLF1-N [CMV/Hygro], pGEX-6P-1, and pFastBac-HTb were obtained from Promega and Sigma-Aldrich. Detailed information on cloning procedures will be provided upon request. Proteins were expressed in _Escherichia coli_ BL21-CodonPlus­(DE3)-RIPL. Cultures were grown in Terrific Broth medium (Sigma-Aldrich) and induced with 0.5 mM IPTG overnight at 18 °C. Bacterial pellets for expression of CHD1 proteins were resuspended in buffer 1 [20 mM Tris-HCl (pH 8.0), 200 mM NaCl] and cells were disrupted in an EmulsiFlex high-pressure homogenizer (Avestin). Proteins were affinity-purified in batch using TALON Superflow affinity resin (GE Healthcare). The resin was washed with buffer 1, and proteins were eluted with buffer 2 [20 mM Tris-HCl (pH 8.0), 50 mM NaCl, 50 mM imidazole (pH 8.0)]. Proteins were further purified by ion exchange chromatography (MonoQ HR 5/50 or Capto HiResQ 5/50 column, GE Healthcare) in 20 mM Tris-HCl (pH 8.0), 50–500 mM NaCl buffer followed by gel filtration (HiLoad 16/600 Superdex 75 pg column, GE Healthcare) in buffer 3 [50 mM HEPES (pH 7.5) 200 mM NaCl] using an ÄKTA pure HPLC system (GE Healthcare).
 
-The user interacts with AI agent by issuing instructions called "prompts". There are very loose restrictions on what can constitute a prompt: it can include text ("please check the following paragraph for grammar and style"), images ("update the attached photo to use natural light"), sound (the user talking to the AI assistant, rather than typing in the prompt), computer code ("write a tic-tac-toe game in JavaScript"), or, in out case, something like "extract the protein production protocols from the following academic publication". LLM ability to generate the next token can on its own be sufficient for handling certain simpler prompts. More complicated prompts, however, require the LLM to use other software systems, or "tools". For example, to update the photo, the agent might need to run image editing software with certain arguments. To verify that the part of the computer program that the agent has just written is syntactically correct and works, the agent might need to run the compiler and the unit tests. The agents often need to search the internet to respond to user queries with up-to-date information. Corporate chatbots extract data from the company databases.
+This is a short paragraph from a 29,000 word paper. The objective of this work is to develop an AI agent that would find paragraphs like this in academic publications and extract structured data formatted according to Expert templates from them, using other bioinformatics databases to fill the gaps, if necessary. 
 
-Reasoning, or thinking LLMs were introduced by OpenAI and DeepSeek in late 2024 / early 2025. Reasoning LLMs split their output into two parts: the "chain of thought", or thinking part, when the LLM tries to explain to itself (and, to a lesser extent, the user), what needs to be done to produce the output, and the final output. The tools are typically called during the thinking phase.
-
-LLMs are fundamentally stochastic systems, so running the same prompt through the same LLM multiple times is not guaranteed to yield identical chain of thought and results. For data extraction this is undesirable: we hope that the protein production protocols contained within a publication leave very little room for interpretation. 
-
+This is a writeup of the first stage of this project.
 
 ## The software stack.
 
-When I first embarked on this project, I was fortunate enough to be completing my final weeks at EBI^, so I could still access the state of the art GPU cluster there.
+When I first embarked on this project, I was fortunate to be completing my final weeks at EBI^, so I could still access their state of the art GPU cluster.
 I did not have access to paid frontline LLMs, like ChatGPT (OpenAI) or Claude (Anthropic), so I decided to use the Qwen^ family of open-weights LLMs (Qwen3.8:27b, to be precise) via Ollama^.
 I picked this combination mostly due to its simplicity, availability and ease of deployment.
 Rapid development of LLM technology makes it imperative to have as much control as possible over model and runner deployment.
@@ -62,14 +70,16 @@ I have tried migrating the pipeline to vLLM, but it turned out that the (quite r
 I have not exhaustively evaluated all combinations of LLMs and runners. 
 This might be a good subject for extending this research.
 
-A lot of technical details discussed in the rest of this post are LLM specific, and would look slightly different if a different LLM or runner was used. However, the features that this project mostly relies on, like tool calling, thinking and output formatting, are supported by most modern LLMs.
+A lot of technical details discussed in the rest of this post are LLM specific, and would look slightly different if a different LLM or runner was used. 
+However, the features that this project mostly relies on, like tool calling, thinking and output formatting, are supported by most modern LLMs.
 
 ## The dataset.
 
 I have chosen to use the Protein Data Bank (PDB)^ as a starting point. Each PDB structure is typically accompanied by a publication, and that publication is referenced from the PDB entry. 
-A protein must be expressed and purified before its structure can be determined, so these papers are quite likely to contain successful protein production protocols, either in the main text of the publication, or in the supplements, or among the cited literature. 
+A protein must be expressed and purified before its structure can be determined, so these papers are quite likely to contain  protein production protocols, either in the main text of the publication, or in the supplements, or among the cited literature. 
+In general only the result of successful experiments get published, so the resulting dataset will contain mostly (or exclusively) positive outcomes, where the POI has in fact been produced. 
 The PDB entry itself contains a lot of relevant information, like the protein sequence and information about the protein complex.
-This is a "low hanging fruit" approach. 
+_This is a "low hanging fruit" approach._ 
 Of course, more protein production protocols could be extracted from the publications that are not referenced from the PDB. 
 **TODO** how many papers?
 But _N_ papers is a good start.
@@ -79,19 +89,63 @@ NCBI PubMed^ ID, or PMID, identifies a record that is essentially a library card
 It provides information like the title, journal, date, authors, sometimes the abstract, but not the full text. 
 The majority of publications on life sciences have PubMed entries. 
 
-Some publications are also deposited to PubMed Central Repository^ (PMC). 
+Publications can also be deposited to PubMed Central Repository^ (PMC). 
 This repository does provide the publication text, along with the supplements. 
 The publications within it are referenced by PMCID.
-Note, however, that the fact that the publication can be accessed through PMC does not automatically mean that anyone can do with it whatever they want (e.g. extract information from it). 
+Being deposited to PMC does not automatically imply that anyone can do with the publication whatever they want (e.g. extract information from it). 
 Some of the publications in PMC come under restrictive licenses.
 Those that are covered by permissive open source licenses, like Creative Commons^ (CC), are flagged as `open pmc`. 
-Recently, the PMC has migrated to [Amazon Web Services (AWS) S3 storage](https://pmc.ncbi.nlm.nih.gov/tools/pmcaws/) . The openly accessible S3 "bucket" is called [`pmc-oa-opendata`](https://pmc-oa-opendata.s3.amazonaws.com/README.txt).
-NCBI provides a [web API](https://www.ncbi.nlm.nih.gov/pmc/utils/idconv/v1.0/) that maps PMIDs to PMC IDs. It accepts batches of up to 200 PMIDs at a time.
+Recently, the PMC has migrated to [Amazon Web Services (AWS) S3 storage](https://pmc.ncbi.nlm.nih.gov/tools/pmcaws/). 
+The openly accessible S3 "bucket" is called [`pmc-oa-opendata`](https://pmc-oa-opendata.s3.amazonaws.com/README.txt).
+NCBI provides a [web API](https://www.ncbi.nlm.nih.gov/pmc/utils/idconv/v1.0/) that maps PMIDs to PMC IDs. 
+It accepts batches of up to 200 PMIDs at a time.
 
 Each publication (version) corresponds to a folder with files in PMC. Typically there would be the main text, plus some supplements. The main text is typically formatted as a PDF, according to the style of the journal where the paper was published. Supplements come in a variety of formats: there could be a zip archive with all the supplements, MS Word files, PDFs, MS Excel tables, images, movies, etc. Most importantly, though, almost always there is a [JATS XML](https://jats.nlm.nih.gov/) file with the main publication text. The text is marked up to show the structure (sections, paragraphs, ...), the typographics (subscripts, superscripts, equations, ...), citations, front and back matter (list of authors and affiliations, references, ...) and other important information. Since JATS XML is almost always available for the publication, and for some other reasons described below, I decided to use these files as inputs to the LLMs.
 
+## The implementation 
 
+Expert proposes Excel spreadsheets for data exchange. 
+This dataset might be re-formatted as Excel, but modern LLMs are usually better trained to deal in open formats, like JSON or XML. 
+The first step of the project was therefore to convert Expert templates into an annotated JSON schema^ (_schema as an asset_).
 
+### Prompt and context
+
+The LLM prompt contains the JSON schema, the publication text in JATS format, the information from the PDB about the protein sequences and complexes, and some instructions on how to put this all together. 
+The full prompt can be downloaded from [here](^). 
+With all placeholders filled in (especially the paper), it becomes quite a long document, potentially hundreds of thousands of tokens.
+This can become a problem, because LLMs are configured during training with a maximum amount of tokens that they can reason over.
+This is called the context window.
+Ollama 3.8 27b has a huge context window of 256K tokens.  
+There are guides online that instruct about limiting the context window for improved performance. 
+I am not doing that, to make sure that the long paper, along with the schema and all the chain of thought of the LLM fits in the context.
+To avoid wasting the LLM compute on unnecessary text, the front and back matter of the paper (i.e. the list of authors with affiliations and the list of references) are removed before including the text in the prompt.
+The drawback of this approach is that if the protocol is not available in the publication but is referred to via one of the cited papers, the agent has no way of retrieving it. 
+In the future, I might experiment with including the references and adding more tools for fetching the cited papers text, or create a separate pipeline for papers with protocols in references.
+
+Another possible approach improving performance with long documents is splitting the pipeline into two stages: extract the short paragraphs relating to protein production first, and then use a separate prompt to extract Expert data from those short paragraphs.
+The drawback of this approach is that the errors from the two steps can accumulate. 
+If the first step misses some important part of the paper, the second step has no way to recover it. 
+I decided to perform the entire data extraction with a single prompt.
+
+### Tips and tricks
+
+Streaming, thinking, num_batch, system prompt vs format
+
+Ollama (and other agentic AI frameworks) allows tweaking lots of parameters when interacting with the LLM. 
+After trying multiple combinations, I ended up with one rule of thumb: make your configuration look as similar to how a general purpose AI agent like Codex or Claude would work as possible.
+Modern LLMs are heavily fine-tuned to support this mode of operation, and departing from it makes the extracted data less accurate.
+In practice, this means:
+* Leave streaming on
+* Leave thinking on
+* Leave the context window large enough to accommodate the publication, rest of the prompt, the thought chain and the result. The full 256K is probably an overkill, 100K should be good enough. 
+* Increase `num_batch` as high as your GPU can handle. This speeds up prompt-processing (prefilling) of large publications.
+* Do not specify `format=json`. Either use the "system prompt" that instructs the LLM to spew json in the result, or use special tools to report the final result (see below).
+
+Other tips and tricks, that are more to do with good engineering practice than specific for building AI agents:
+* Capture the Ollama performance statistics: prompt and eval duration and counts. 
+* Always wrap handling of each paper with a try/catch block. LLMs produce non-deterministic results, and no system prompt will ever guarantee that a valid schema-compliant JSON will be returned 100% of the time.
+
+### Tool calling
 
 ## Plan
 
@@ -99,12 +153,12 @@ Each publication (version) corresponds to a folder with files in PMC. Typically 
 * ✅ Setup: ollama, qwen 3.8. 
 * ✅ Amazon S3 for PMC. PDB provides mapping of protein structures to PMC IDs.
 * ✅ Use the latest model! Must be able to upgrade stuff on short notice.
-* Context length
+* ✅ Context length
 * ✅ Usage of JATS
 * ✅ Legal concerns - although the text might be downloadable from PMC, that does not necessarily mean that the publication is a part of "Open PMC". 
 
-* No `json` format for LLM response. No schema in the format.
-* Thinking and streaming - good
+* ✅ No `json` format for LLM response. No schema in the format.
+* ✅ Thinking and streaming - good
 
 ### Tool calling
 * Tool calling - good, but does not mix well with instructions about LLM response
@@ -120,7 +174,7 @@ Each publication (version) corresponds to a folder with files in PMC. Typically 
 * Better roll your own tool with the help of coding agents than rely on some shitty "unofficial" MCP server
 
 ## Plan (continued)
-* A practical trade-off about whether to use single stage or multiple stages for retrieving references
+* ✅ A practical trade-off about whether to use single stage or multiple stages for retrieving references
 * Some numbers (?)
   * How long does it take to AI-annotate one publication?
   * How many publications are there?
@@ -129,14 +183,15 @@ Each publication (version) corresponds to a folder with files in PMC. Typically 
   * For example, it made good distinction between constructs that have been expressed and purified, and other constructs of the same proteins that were also expressed but used in cell based assays.
 * Async python
 * ✅ Mention EBI
-* Schema in the prompt
-* Mention Expert, if published
+* ✅ Schema in the prompt
+* ✅ Mention Expert, if published
 * How to verify this data?
   * AI makes mistakes, but so do humans
   * Have another model that acts as a validator
   * Engage with original publication authors.
   * Distinguish entries reviewed by humans from purely AI-generated and reviewed entries.
 * ✅ Next steps: vLLM, others?
+* ✅ Example of protein production protocol
 
 ## Technical tips
 
@@ -144,4 +199,18 @@ Each publication (version) corresponds to a folder with files in PMC. Typically 
 * NCBI REST API to resolve PMIDs to PMC IDs: https://www.ncbi.nlm.nih.gov/pmc/utils/idconv/v1.0/. It accepts batches of up to 200 comma-delimited ids at a time.
 * PMC on AWS S3: https://pmc.ncbi.nlm.nih.gov/tools/pmcaws/; https://pmc-oa-opendata.s3.amazonaws.com/README.txt
   * Python library for working with S3: `pip install boto3`
+
+## Deciphering the modern AI jargon
+
+***TODO*** convert to glossary of terms
+
+LLMs and AI agents are complex software systems. All the details of LLM training and inner workings of AI agents are too numerous to be covered by a blog post. Some are in fact trade secrets of the multi-billion dollar companies that develop these systems. The next few paragraphs explain the AI terminology that is used throughout the rest of this blog post.
+
+Fundamentally, LLMs are tools that predict the next token (word or part of a word) based on the context: the input tokens plus the previously generated tokens. AI agents are applications that allow users to interact with LLMs and allow the LLMs to use tools. General purpose AI agents like ChatGPT, Codex or Gemini have become ubiquitous in recent years. This project is essentially about developing a custom AI assistant on an open source software stack, which is purpose-built for extracting data from academic publications and can be run in an automated setting.
+
+The user interacts with AI agent by issuing instructions called "prompts". There are very loose restrictions on what can constitute a prompt: it can include text ("please check the following paragraph for grammar and style"), images ("update the attached photo to use natural light"), sound (the user talking to the AI assistant, rather than typing in the prompt), computer code ("write a tic-tac-toe game in JavaScript"), or, in out case, something like "extract the protein production protocols from the following academic publication". LLM ability to generate the next token can on its own be sufficient for handling certain simpler prompts. More complicated prompts, however, require the LLM to use other software systems, or "tools". For example, to update the photo, the agent might need to run image editing software with certain arguments. To verify that the part of the computer program that the agent has just written is syntactically correct and works, the agent might need to run the compiler and the unit tests. The agents often need to search the internet to respond to user queries with up-to-date information. Corporate chatbots extract data from the company databases.
+
+Reasoning, or thinking LLMs were introduced by OpenAI and DeepSeek in late 2024 / early 2025. Reasoning LLMs split their output into two parts: the "chain of thought", or thinking part, when the LLM tries to explain to itself (and, to a lesser extent, the user), what needs to be done to produce the output, and the final output. The tools are typically called during the thinking phase.
+
+LLMs are fundamentally stochastic systems, so running the same prompt through the same LLM multiple times is not guaranteed to yield identical chain of thought and results. For data extraction this is undesirable: we hope that the protein production protocols contained within a publication leave very little room for interpretation. 
 
