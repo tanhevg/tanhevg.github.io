@@ -43,8 +43,11 @@ author:
   # Used by `jekyll-feed`:
   name:                Gene Tankhilevich
   email:               <evgeny.tanhilevich@gmail.com>
+  social:
+    github: tanhevg
+    linkedin: tanhevg
+    email: mailto:evgeny.tanhilevich@gmail.com
   # # Used by `jekyll-seo-tag`:
-  # twitter:             <username>
 
 # Add links to the sidebar.
 menu:
