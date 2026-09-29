@@ -5,4 +5,4 @@ description: >
 hide_description: true
 ---
 
-This is a collection of posts on computational biology, bioinformatics and AI that are worthy of sharing with the world but have not yet been published in a peer-reviewed journal. 
+This is a collection of my posts on computational biology, bioinformatics and AI and other matters that are worthy of sharing with the world. 
