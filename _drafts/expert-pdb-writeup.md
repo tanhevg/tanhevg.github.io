@@ -16,7 +16,6 @@ Lots of valuable information can be extracted, but some important fields are oft
 
 This is an unfinished project. 
 Mostly this is a long "note to self" in case I have an opportunity to get back to this. 
-But maybe others will find some of this interesting too.
 This is not an academic paper, so apologies in advance if some acronym is not explained in the glossary. 
 Feel free to reach out to me on email or on socials if you find mistakes or think that this post can be improved.
 
