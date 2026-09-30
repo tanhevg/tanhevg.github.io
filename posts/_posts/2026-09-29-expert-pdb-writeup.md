@@ -9,7 +9,7 @@ title: Protein production data acquisition with agentic AI: what I've learned.
 
 ## TL;DR
 This writeup describes an AI agent that extracts structured information about protein production protocols from academic publications. 
-It uses previously published [Expert](#) data format. 
+It uses previously published [Expert](https://doi.org/10.1016/j.jbc.2026.113610) data format. 
 I describe the data sources and the software stack that I used to implement the agent.
 In short, it works quite well, although it takes a long time and a lot of compute to process the long manuscripts.
 Lots of valuable information can be extracted, but some important fields are often left out of the papers.
@@ -40,7 +40,7 @@ Results and protocols of protein production experiments are regularly published 
 I am not aware of any bioinformatics resource or a database that standardizes and catalogs this information, like the [PDB](https://www.ebi.ac.uk/pdbe/) does for protein structures or [Uniprot](https://www.uniprot.org/) for proteins in general.
 Such a resource would be extremely valuable for academia and industry as a historic reference of protein production protocols (both successful and failed), for experiment reproducibility and as a source of training and evaluation data for AI models.
 
-The data capture templates defining the protocol details have been proposed by the [Expert paper](#).
+The data capture templates defining the protocol details have been proposed by the [Expert paper](https://doi.org/10.1016/j.jbc.2026.113610).
 They contain the information about the target, the construct, expression and purification protocols.
 Bacterial, insect and mammalian expression hosts are covered, along with cell-free systems. 
 The templates support capturing the information about the protein complexes.
