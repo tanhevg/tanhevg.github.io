@@ -8,7 +8,7 @@ title: Protein production data acquisition with agentic AI: what I've learned.
 {:toc}
 
 ## TL;DR
-This writeup describes an AI agent that extracts structured information about protein production protocols from academic publications. 
+This writeup describes an [AI agent](https://github.com/tanhevg/expert_pdb) that extracts structured information about protein production protocols from academic publications. 
 It uses previously published [Expert](https://doi.org/10.1016/j.jbc.2026.113610) data format. 
 I describe the data sources and the software stack that I used to implement the agent.
 In short, it works quite well, although it takes a long time and a lot of compute to process the long manuscripts.
@@ -18,6 +18,7 @@ This is an unfinished project.
 Mostly this is a long "note to self" in case I have an opportunity to get back to this. 
 This is not an academic paper, so apologies in advance if some acronym is not explained in the glossary. 
 Feel free to reach out to me on email or on socials if you find mistakes or think that this post can be improved.
+If you have access to GPUs and would be interested in bringing this project to fruition, I am happy to collaborate.
 
 ## Rationale
 
